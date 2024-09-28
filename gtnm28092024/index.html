@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up & Login with Menu</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        /* Menu Bar Styles */
+        nav {
+            width: 100%;
+            background-color: #4A90E2;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 50px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #cce0ff;
+        }
+
+        .menu-right {
+            display: flex;
+        }
+
+        /* Form and Personal Info Styles */
+        .form-container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .form-container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .input-field {
+            margin: 15px 0;
+            width: 100%;
+        }
+
+        .input-field input, .input-field select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            background: #f9f9f9;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+
+        .input-field input:focus, .input-field select:focus {
+            border-color: #4A90E2;
+        }
+
+        .btn {
+            background-color: #4A90E2;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: #357ABD;
+        }
+
+        .personal-info {
+            color: #333;
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Menu Bar -->
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Labs</a></li>
+        </ul>
+        <ul class="menu-right">
+            <li><a href="#" id="login-link">Log in</a></li>
+            <li><a href="#" id="signup-link">Sign up</a></li>
+        </ul>
+    </nav>
+
+    <!-- Sign Up Form -->
+    <div class="form-container" id="signup-form" style="display:none;">
+        <h2>Sign Up</h2>
+        <div class="input-field">
+            <input type="text" id="signup-username" placeholder="Username" required>
+        </div>
+        <div class="input-field">
+            <input type="email" id="signup-email" placeholder="Email" required>
+        </div>
+        <div class="input-field">
+            <input type="password" id="signup-password" placeholder="Password" required>
+        </div>
+        <div class="input-field">
+            <select id="signup-role" required>
+                <option value="" disabled selected>Select Role</option>
+                <option value="admin">Admin</option>
+                <option value="user">User</option>
+            </select>
+        </div>
+        <button class="btn" id="signup-btn">Sign Up</button>
+    </div>
+
+    <!-- Login Form -->
+    <div class="form-container" id="login-form">
+        <h2>Log In</h2>
+        <div class="input-field">
+            <input type="text" id="login-username" placeholder="Username" required>
+        </div>
+        <div class="input-field">
+            <input type="password" id="login-password" placeholder="Password" required>
+        </div>
+        <button class="btn" id="login-btn">Log In</button>
+    </div>
+
+    <!-- Personal Information Display -->
+    <div class="personal-info" id="personal-info" style="display:none;">
+        <h2>Personal Information</h2>
+        <p><strong>Username:</strong> <span id="display-username"></span></p>
+        <p><strong>Email:</strong> <span id="display-email"></span></p>
+        <p><strong>Role:</strong> <span id="display-role"></span></p>
+    </div>
+
+    <script>
+        // DOM Elements
+        const signupForm = document.getElementById('signup-form');
+        const loginForm = document.getElementById('login-form');
+        const personalInfo = document.getElementById('personal-info');
+
+        const signupBtn = document.getElementById('signup-btn');
+        const loginBtn = document.getElementById('login-btn');
+
+        const loginLink = document.getElementById('login-link');
+        const signupLink = document.getElementById('signup-link');
+
+        // Storing user data
+        let userData = {};
+
+        // Show Signup form and hide others
+        signupLink.addEventListener('click', function() {
+            signupForm.style.display = 'block';
+            loginForm.style.display = 'none';
+            personalInfo.style.display = 'none';
+        });
+
+        // Show Login form and hide others
+        loginLink.addEventListener('click', function() {
+            signupForm.style.display = 'none';
+            loginForm.style.display = 'block';
+            personalInfo.style.display = 'none';
+        });
+
+        // Sign Up Process
+        signupBtn.addEventListener('click', function() {
+            const username = document.getElementById('signup-username').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const role = document.getElementById('signup-role').value;
+
+            if (username && email && password && role) {
+                userData = { username, email, password, role };
+                alert("Sign up successful!");
+
+                // Automatically redirect to login form after sign up
+                signupForm.style.display = 'none';
+                loginForm.style.display = 'block';
+            } else {
+                alert("Please fill all fields.");
+            }
+        });
+
+        // Log In Process
+        loginBtn.addEventListener('click', function() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+            if (username === userData.username && password === userData.password) {
+                // Display personal information after successful login
+                document.getElementById('display-username').innerText = userData.username;
+                document.getElementById('display-email').innerText = userData.email;
+                document.getElementById('display-role').innerText = userData.role;
+
+                loginForm.style.display = 'none';
+                personalInfo.style.display = 'block';
+            } else {
+                alert("Incorrect username or password.");
+            }
+        });
+    </script>
+</body>
+</html>
